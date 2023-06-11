@@ -63,14 +63,14 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
 fn link_libraries(manifest_path: &path::Path) {
     let library_path = manifest_path.join("SDK").join("Libraries");
 
-    if cfg!(windows) {
+    if cfg!(target_os = "windows") {
         println!(
             "cargo:rustc-link-search={}",
             library_path.join("Win").display()
         );
         println!("cargo:rustc-link-lib=XPLM_64");
         println!("cargo:rustc-link-lib=XPWidgets_64");
-    } else if cfg!(macos) {
+    } else if cfg!(target_os = "macos") {
         println!(
             "cargo:rustc-link-search=framework={}",
             library_path.join("Mac").display()
