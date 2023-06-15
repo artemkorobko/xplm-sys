@@ -39,7 +39,9 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
 
     let bindings = builder
         .allowlist_function("XP.*")
-        .blocklist_type("__.*")
+        .allowlist_type("XP.*")
+        .allowlist_var("XPLM_VK_.*")
+        .allowlist_var("xplm_Command.*")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .clang_args([
             "-fparse-all-comments",
