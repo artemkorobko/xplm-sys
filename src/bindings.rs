@@ -2706,6 +2706,12 @@ extern "C" {
         inRelativeToNow: ::std::os::raw::c_int,
     );
 }
+#[doc = " A situation (.sit) file, which starts off a flight in a given              *\n configuration."]
+pub const xplm_DataFile_Situation: _bindgen_ty_43 = 1;
+#[doc = " A situation movie (.smo) file, which replays a past flight."]
+pub const xplm_DataFile_ReplayMovie: _bindgen_ty_43 = 2;
+#[doc = " XPLMDataFileType\n\n These enums define types of data files you can load or unload using the\n SDK.\n"]
+pub type _bindgen_ty_43 = ::std::os::raw::c_uint;
 pub type XPLMDataFileType = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMGetSystemPath\n\n This function returns the full path to the X-System folder. Note that this\n is a directory path, so it ends in a trailing : or / .\n\n The buffer you pass should be at least 512 characters long.  The path is\n returned using the current native or OS path conventions.\n"]
