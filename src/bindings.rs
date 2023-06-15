@@ -2758,6 +2758,10 @@ extern "C" {
         inFilePath: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
+pub const xplm_Host_Unknown: _bindgen_ty_44 = 0;
+pub const xplm_Host_XPlane: _bindgen_ty_44 = 1;
+#[doc = " XPLMHostApplicationID\n\n While the plug-in SDK is only accessible to plugins running inside X-Plane,\n the original authors considered extending the API to other applications\n that shared basic infrastructure with X-Plane. These enumerations are\n hold-overs from that original roadmap; all values other than X-Plane are\n deprecated. Your plugin should never need this enumeration.\n"]
+pub type _bindgen_ty_44 = ::std::os::raw::c_uint;
 pub type XPLMHostApplicationID = ::std::os::raw::c_int;
 pub type XPLMLanguageCode = ::std::os::raw::c_int;
 #[doc = " XPLMError_f\n\n An XPLM error callback is a function that you provide to receive debugging\n information from the plugin SDK. See XPLMSetErrorCallback for more\n information. NOTE: for the sake of debugging, your error callback will be\n called even if your plugin is not enabled, allowing you to receive debug\n info in your XPluginStart and XPluginStop callbacks. To avoid causing logic\n errors in the management code, do not call any other plugin routines from\n your error callback - it is only meant for catching errors in the\n debugging.\n"]
