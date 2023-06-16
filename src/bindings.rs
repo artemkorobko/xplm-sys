@@ -152,6 +152,18 @@ pub const XPLM_MAP_USER_INTERFACE: &[u8; 24usize] = b"XPLM_MAP_USER_INTERFACE\0"
 pub const XPLM_MAP_IOS: &[u8; 13usize] = b"XPLM_MAP_IOS\0";
 #[doc = " XPLMPluginID\n\n Each plug-in is identified by a unique integer ID.  This ID can be used to\n disable or enable a plug-in, or discover what plug-in is 'running' at the\n time.  A plug-in ID is unique within the currently running instance of\n X-Plane unless plug-ins are reloaded.  Plug-ins may receive a different\n unique ID each time they are loaded. This includes the unloading and\n reloading of plugins that are part of the user's aircraft.\n\n For persistent identification of plug-ins, use XPLMFindPluginBySignature in\n XPLMUtiltiies.h .\n\n -1 indicates no plug-in.\n"]
 pub type XPLMPluginID = ::std::os::raw::c_int;
+#[doc = " The shift key is down"]
+pub const xplm_ShiftFlag: _bindgen_ty_1 = 1;
+#[doc = " The option or alt key is down"]
+pub const xplm_OptionAltFlag: _bindgen_ty_1 = 2;
+#[doc = " The control key is down"]
+pub const xplm_ControlFlag: _bindgen_ty_1 = 4;
+#[doc = " The key is being pressed down"]
+pub const xplm_DownFlag: _bindgen_ty_1 = 8;
+#[doc = " The key is being released"]
+pub const xplm_UpFlag: _bindgen_ty_1 = 16;
+#[doc = " XPLMKeyFlags\n\n These bitfields define modifier keys in a platform independent way. When a\n key is pressed, a series of messages are sent to your plugin.  The down\n flag is set in the first of these messages, and the up flag in the last.\n While the key is held down, messages are sent with neither flag set to\n indicate that the key is being held down as a repeated character.\n\n The control flag is mapped to the control flag on Macintosh and PC.\n Generally X-Plane uses the control key and not the command key on\n Macintosh, providing a consistent interface across platforms that does not\n necessarily match the Macintosh user interface guidelines.  There is not\n yet a way for plugins to access the Macintosh control keys without using\n #ifdefed code.\n"]
+pub type _bindgen_ty_1 = ::std::os::raw::c_uint;
 pub type XPLMKeyFlags = ::std::os::raw::c_int;
 #[doc = " XPLMFixedString150_t\n\n A container for a fixed-size string buffer of 150 characters.\n"]
 #[repr(C)]
@@ -569,6 +581,24 @@ extern "C" {
         inBottom: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
 }
+#[doc = " This is the first phase where you can draw in 2-d."]
+pub const xplm_Phase_FirstCockpit: _bindgen_ty_24 = 35;
+#[doc = " The non-moving parts of the aircraft panel."]
+pub const xplm_Phase_Panel: _bindgen_ty_24 = 40;
+#[doc = " The moving parts of the aircraft panel."]
+pub const xplm_Phase_Gauges: _bindgen_ty_24 = 45;
+#[doc = " Floating windows from plugins."]
+pub const xplm_Phase_Window: _bindgen_ty_24 = 50;
+#[doc = " The last chance to draw in 2d."]
+pub const xplm_Phase_LastCockpit: _bindgen_ty_24 = 55;
+#[doc = " Removed as of XPLM300; Use the full-blown XPLMMap API instead."]
+pub const xplm_Phase_LocalMap3D: _bindgen_ty_24 = 100;
+#[doc = " Removed as of XPLM300; Use the full-blown XPLMMap API instead."]
+pub const xplm_Phase_LocalMap2D: _bindgen_ty_24 = 101;
+#[doc = " Removed as of XPLM300; Use the full-blown XPLMMap API instead."]
+pub const xplm_Phase_LocalMapProfile: _bindgen_ty_24 = 102;
+#[doc = " XPLMDrawingPhase\n\n This constant indicates which part of drawing we are in.  Drawing is done\n from the back to the front.  We get a callback before or after each item.\n Metaphases provide access to the beginning and end of the 3d (scene) and\n 2d (cockpit) drawing in a manner that is independent of new phases added\n  via X-Plane implementation.\n\n **NOTE**: As of XPLM302 the legacy 3D drawing phases (xplm_Phase_FirstScene\n   to xplm_Phase_LastScene) are deprecated. When running under X-Plane 11.50\n   with the modern Vulkan or Metal backend, X-Plane will no longer call\n   these drawing phases. There is a new drawing phase, xplm_Phase_Modern3D,\n   which is supported under OpenGL and Vulkan which is called out roughly\n   where the old before xplm_Phase_Airplanes phase was for blending. This\n   phase is *NOT* supported under Metal and comes with potentially\n   substantial performance overhead. Please do *NOT* opt into this phase if\n   you don't do any actual drawing that requires the depth buffer in some\n   way!\n\n **WARNING**: As X-Plane's scenery evolves, some drawing phases may cease to\n   exist and new ones may be invented.  If you need a particularly specific\n   use of these codes, consult Austin and/or be prepared to revise your code\n   as X-Plane evolves.\n"]
+pub type _bindgen_ty_24 = ::std::os::raw::c_uint;
 pub type XPLMDrawingPhase = ::std::os::raw::c_int;
 #[doc = " XPLMDrawCallback_f\n\n This is the prototype for a low level drawing callback.  You are passed in\n the phase and whether it is before or after.  If you are before the phase,\n return 1 to let X-Plane draw or 0 to suppress X-Plane drawing.  If you are\n after the phase the return value is ignored.\n\n Refcon is a unique value that you specify when registering the callback,\n allowing you to slip a pointer to your own data to the callback.\n\n Upon entry the OpenGL context will be correctly set up for you and OpenGL\n will be in 'local' coordinates for 3d drawing and panel coordinates for 2d\n drawing.  The OpenGL state (texturing, etc.) will be unknown.\n"]
 pub type XPLMDrawCallback_f = ::std::option::Option<
@@ -596,6 +626,44 @@ extern "C" {
         inRefcon: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int;
 }
+#[doc = " GNS430, pilot side."]
+pub const xplm_device_GNS430_1: _bindgen_ty_25 = 0;
+#[doc = " GNS430, copilot side."]
+pub const xplm_device_GNS430_2: _bindgen_ty_25 = 1;
+#[doc = " GNS530, pilot side."]
+pub const xplm_device_GNS530_1: _bindgen_ty_25 = 2;
+#[doc = " GNS530, copilot side."]
+pub const xplm_device_GNS530_2: _bindgen_ty_25 = 3;
+#[doc = " generic airliner CDU, pilot side."]
+pub const xplm_device_CDU739_1: _bindgen_ty_25 = 4;
+#[doc = " generic airliner CDU, copilot side."]
+pub const xplm_device_CDU739_2: _bindgen_ty_25 = 5;
+#[doc = " G1000 Primary Flight Display, pilot side."]
+pub const xplm_device_G1000_PFD_1: _bindgen_ty_25 = 6;
+#[doc = " G1000 Multifunction Display."]
+pub const xplm_device_G1000_MFD: _bindgen_ty_25 = 7;
+#[doc = " G1000 Primary Flight Display, copilot side."]
+pub const xplm_device_G1000_PFD_2: _bindgen_ty_25 = 8;
+#[doc = " Primus CDU, pilot side."]
+pub const xplm_device_CDU815_1: _bindgen_ty_25 = 9;
+#[doc = " Primus CDU, copilot side."]
+pub const xplm_device_CDU815_2: _bindgen_ty_25 = 10;
+#[doc = " Primus Primary Flight Display, pilot side."]
+pub const xplm_device_Primus_PFD_1: _bindgen_ty_25 = 11;
+#[doc = " Primus Primary Flight Display, copilot side."]
+pub const xplm_device_Primus_PFD_2: _bindgen_ty_25 = 12;
+#[doc = " Primus Multifunction Display, pilot side."]
+pub const xplm_device_Primus_MFD_1: _bindgen_ty_25 = 13;
+#[doc = " Primus Multifunction Display, copilot side."]
+pub const xplm_device_Primus_MFD_2: _bindgen_ty_25 = 14;
+#[doc = " Primus Multifunction Display, central."]
+pub const xplm_device_Primus_MFD_3: _bindgen_ty_25 = 15;
+#[doc = " Primus Radio Management Unit, pilot side."]
+pub const xplm_device_Primus_RMU_1: _bindgen_ty_25 = 16;
+#[doc = " Primus Radio Management Unit, copilot side."]
+pub const xplm_device_Primus_RMU_2: _bindgen_ty_25 = 17;
+#[doc = " XPLMDeviceID\n\n This constant indicates the device we want to override or enhance. We can\n get a callback before or after each item.\n"]
+pub type _bindgen_ty_25 = ::std::os::raw::c_uint;
 pub type XPLMDeviceID = ::std::os::raw::c_int;
 #[doc = " XPLMAvionicsCallback_f\n\n This is the prototype for your drawing callback.  You are passed in the\n device you are enhancing/replacing,  and whether it is before or after\n X-Plane drawing. If you are before X-Plane, return 1 to let X-Plane draw or\n 0 to suppress X-Plane drawing.  If you are after the phase the return value\n is ignored.\n\n Refcon is a unique value that you specify when registering the callback,\n allowing you to slip a pointer to your own data to the callback.\n\n Upon entry the OpenGL context will be correctly set up for you and OpenGL\n will be in panel coordinates for 2d drawing.  The OpenGL state (texturing,\n etc.) will be unknown.\n"]
 pub type XPLMAvionicsCallback_f = ::std::option::Option<
@@ -715,6 +783,11 @@ pub type XPLMHandleKey_f = ::std::option::Option<
         losingFocus: ::std::os::raw::c_int,
     ),
 >;
+pub const xplm_MouseDown: _bindgen_ty_26 = 1;
+pub const xplm_MouseDrag: _bindgen_ty_26 = 2;
+pub const xplm_MouseUp: _bindgen_ty_26 = 3;
+#[doc = " XPLMMouseStatus\n\n When the mouse is clicked, your mouse click routine is called repeatedly.\n It is first called with the mouse down message.  It is then called zero or\n more times with the mouse-drag message, and finally it is called once with\n the mouse up message.  All of these messages will be directed to the same\n window; you are guaranteed to not receive a drag or mouse-up event without\n first receiving the corresponding mouse-down.\n"]
+pub type _bindgen_ty_26 = ::std::os::raw::c_uint;
 pub type XPLMMouseStatus = ::std::os::raw::c_int;
 #[doc = " XPLMHandleMouseClick_f\n\n You receive this call for one of three events:\n\n - when the user clicks the mouse button down\n - (optionally) when the user drags the mouse after a down-click, but before\n   the up-click\n - when the user releases the down-clicked mouse button.\n\n You receive the x and y of the click, your window, and a refcon.  Return 1\n to consume the click, or 0 to pass it through.\n\n WARNING: passing clicks through windows (as of this writing) causes mouse\n tracking problems in X-Plane; do not use this feature!\n\n The units for x and y values match the units used in your window. Thus, for\n \"modern\" windows (those created via XPLMCreateWindowEx() and compiled\n against the XPLM300 library), the units are boxels, while legacy windows\n will get pixels. Legacy windows have their origin in the lower left of the\n main X-Plane window, while modern windows have their origin in the lower\n left of the global desktop space. In both cases, x increases as you move\n right, and y increases as you move up.\n"]
 pub type XPLMHandleMouseClick_f = ::std::option::Option<
@@ -726,6 +799,16 @@ pub type XPLMHandleMouseClick_f = ::std::option::Option<
         inRefcon: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int,
 >;
+#[doc = " X-Plane manages the cursor normally, plugin does not affect the cusrsor."]
+pub const xplm_CursorDefault: _bindgen_ty_27 = 0;
+#[doc = " X-Plane hides the cursor."]
+pub const xplm_CursorHidden: _bindgen_ty_27 = 1;
+#[doc = " X-Plane shows the cursor as the default arrow."]
+pub const xplm_CursorArrow: _bindgen_ty_27 = 2;
+#[doc = " X-Plane shows the cursor but lets you select an OS cursor."]
+pub const xplm_CursorCustom: _bindgen_ty_27 = 3;
+#[doc = " XPLMCursorStatus\n\n XPLMCursorStatus describes how you would like X-Plane to manage the cursor.\n See XPLMHandleCursor_f for more info.\n"]
+pub type _bindgen_ty_27 = ::std::os::raw::c_uint;
 pub type XPLMCursorStatus = ::std::os::raw::c_int;
 #[doc = " XPLMHandleCursor_f\n\n The SDK calls your cursor status callback when the mouse is over your\n plugin window.  Return a cursor status code to indicate how you would like\n X-Plane to manage the cursor.  If you return xplm_CursorDefault, the SDK\n will try lower-Z-order plugin windows, then let the sim manage the cursor.\n\n Note: you should never show or hide the cursor yourself---these APIs are\n typically reference-counted and thus cannot safely and predictably be used\n by the SDK.  Instead return one of xplm_CursorHidden to hide the cursor or\n xplm_CursorArrow/xplm_CursorCustom to show the cursor.\n\n If you want to implement a custom cursor by drawing a cursor in OpenGL, use\n xplm_CursorHidden to hide the OS cursor and draw the cursor using a 2-d\n drawing callback (after xplm_Phase_Window is probably a good choice, but\n see deprecation warnings on the drawing APIs!).  If you want to use a\n custom OS-based cursor, use xplm_CursorCustom to ask X-Plane to show the\n cursor but not affect its image.  You can then use an OS specific call like\n SetThemeCursor (Mac) or SetCursor/LoadCursor (Windows).\n\n The units for x and y values match the units used in your window. Thus, for\n \"modern\" windows (those created via XPLMCreateWindowEx() and compiled\n against the XPLM300 library), the units are boxels, while legacy windows\n will get pixels. Legacy windows have their origin in the lower left of the\n main X-Plane window, while modern windows have their origin in the lower\n left of the global desktop space. In both cases, x increases as you move\n right, and y increases as you move up.\n"]
 pub type XPLMHandleCursor_f = ::std::option::Option<
@@ -747,7 +830,27 @@ pub type XPLMHandleMouseWheel_f = ::std::option::Option<
         inRefcon: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int,
 >;
+#[doc = " The lowest layer, used for HUD-like displays while flying."]
+pub const xplm_WindowLayerFlightOverlay: _bindgen_ty_28 = 0;
+#[doc = " Windows that \"float\" over the sim, like the X-Plane 11 map does. If you are*\n not sure which layer to create your window in, choose floating."]
+pub const xplm_WindowLayerFloatingWindows: _bindgen_ty_28 = 1;
+#[doc = " An interruptive modal that covers the sim with a transparent black overlay *\n to draw the user's focus to the alert"]
+pub const xplm_WindowLayerModal: _bindgen_ty_28 = 2;
+#[doc = " \"Growl\"-style notifications that are visible in a corner of the screen,    *\n even over modals"]
+pub const xplm_WindowLayerGrowlNotifications: _bindgen_ty_28 = 3;
+#[doc = " XPLMWindowLayer\n\n XPLMWindowLayer describes where in the ordering of windows X-Plane should\n place a particular window. Windows in higher layers cover windows in lower\n layers. So, a given window might be at the top of its particular layer, but\n it might still be obscured by a window in a higher layer. (This happens\n frequently when floating windows, like X-Plane's map, are covered by a\n modal alert.)\n\n Your window's layer can only be specified when you create the window (in\n the XPLMCreateWindow_t you pass to XPLMCreateWindowEx()). For this reason,\n layering only applies to windows created with new X-Plane 11 GUI features.\n (Windows created using the older XPLMCreateWindow(), or windows compiled\n against a pre-XPLM300 version of the SDK will simply be placed in the\n flight overlay window layer.)\n"]
+pub type _bindgen_ty_28 = ::std::os::raw::c_uint;
 pub type XPLMWindowLayer = ::std::os::raw::c_int;
+#[doc = " X-Plane will draw no decoration for your window, and apply no automatic    *\n click handlers. The window will not stop click from passing through its    *\n bounds. This is suitable for \"windows\" which request, say, the full screen *\n bounds, then only draw in a small portion of the available area."]
+pub const xplm_WindowDecorationNone: _bindgen_ty_29 = 0;
+#[doc = " The default decoration for \"native\" windows, like the map. Provides a solid*\n background, as well as click handlers for resizing and dragging the window."]
+pub const xplm_WindowDecorationRoundRectangle: _bindgen_ty_29 = 1;
+#[doc = " X-Plane will draw no decoration for your window, nor will it provide resize*\n handlers for your window edges, but it will stop clicks from passing       *\n through your windows bounds."]
+pub const xplm_WindowDecorationSelfDecorated: _bindgen_ty_29 = 2;
+#[doc = " Like self-decorated, but with resizing; X-Plane will draw no decoration for*\n your window, but it will stop clicks from passing through your windows     *\n bounds, and provide automatic mouse handlers for resizing."]
+pub const xplm_WindowDecorationSelfDecoratedResizable: _bindgen_ty_29 = 3;
+#[doc = " XPLMWindowDecoration\n\n XPLMWindowDecoration describes how \"modern\" windows will be displayed. This\n impacts both how X-Plane draws your window as well as certain mouse\n handlers.\n\n Your window's decoration can only be specified when you create the window\n (in the XPLMCreateWindow_t you pass to XPLMCreateWindowEx()).\n"]
+pub type _bindgen_ty_29 = ::std::os::raw::c_uint;
 pub type XPLMWindowDecoration = ::std::os::raw::c_int;
 #[doc = " XPLMCreateWindow_t\n\n The XPMCreateWindow_t structure defines all of the parameters used to\n create a modern window using XPLMCreateWindowEx().  The structure will be\n expanded in future SDK APIs to include more features.  Always set the\n structSize member to the size of your struct in bytes!\n\n All windows created by this function in the XPLM300 version of the API are\n created with the new X-Plane 11 GUI features. This means your plugin will\n get to \"know\" about the existence of X-Plane windows other than the main\n window. All drawing and mouse callbacks for your window will occur in\n \"boxels,\" giving your windows automatic support for high-DPI scaling in\n X-Plane. In addition, your windows can opt-in to decoration with the\n X-Plane 11 window styling, and you can use the\n XPLMSetWindowPositioningMode() API to make your window \"popped out\" into a\n first-class operating system window.\n\n Note that this requires dealing with your window's bounds in \"global\n desktop\" positioning units, rather than the traditional panel coordinate\n system. In global desktop coordinates, the main X-Plane window may not have\n its origin at coordinate (0, 0), and your own window may have negative\n coordinates. Assuming you don't implicitly assume (0, 0) as your origin,\n the only API change you should need is to start using\n XPLMGetMouseLocationGlobal() rather than XPLMGetMouseLocation(), and\n XPLMGetScreenBoundsGlobal() instead of XPLMGetScreenSize().\n\n If you ask to be decorated as a floating window, you'll get the blue window\n control bar and blue backing that you see in X-Plane 11's normal \"floating\"\n windows (like the map).\n"]
 #[repr(C)]
@@ -1120,6 +1223,20 @@ extern "C" {
         inMaxHeightBoxels: ::std::os::raw::c_int,
     );
 }
+#[doc = " The default positioning mode. Set the window geometry and its future       *\n position will be determined by its window gravity, resizing limits, and    *\n user interactions."]
+pub const xplm_WindowPositionFree: _bindgen_ty_30 = 0;
+#[doc = " Keep the window centered on the monitor you specify"]
+pub const xplm_WindowCenterOnMonitor: _bindgen_ty_30 = 1;
+#[doc = " Keep the window full screen on the monitor you specify"]
+pub const xplm_WindowFullScreenOnMonitor: _bindgen_ty_30 = 2;
+#[doc = " Like gui_window_full_screen_on_monitor, but stretches over *all* monitors  *\n and popout windows. This is an obscure one... unless you have a very good  *\n reason to need it, you probably don't!"]
+pub const xplm_WindowFullScreenOnAllMonitors: _bindgen_ty_30 = 3;
+#[doc = " A first-class window in the operating system, completely separate from the *\n X-Plane window(s)"]
+pub const xplm_WindowPopOut: _bindgen_ty_30 = 4;
+#[doc = " A floating window visible on the VR headset"]
+pub const xplm_WindowVR: _bindgen_ty_30 = 5;
+#[doc = " XPLMWindowPositioningMode\n\n XPLMWindowPositionMode describes how X-Plane will position your window on\n the user's screen. X-Plane will maintain this positioning mode even as the\n user resizes their window or adds/removes full-screen monitors.\n\n Positioning mode can only be set for \"modern\" windows (that is, windows\n created using XPLMCreateWindowEx() and compiled against the XPLM300 SDK).\n Windows created using the deprecated XPLMCreateWindow(), or windows\n compiled against a pre-XPLM300 version of the SDK will simply get the\n \"free\" positioning mode.\n"]
+pub type _bindgen_ty_30 = ::std::os::raw::c_uint;
 pub type XPLMWindowPositioningMode = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMSetWindowPositioningMode\n\n Sets the policy for how X-Plane will position your window.\n\n Some positioning modes apply to a particular monitor. For those modes, you\n can pass a negative monitor index to position the window on the main\n X-Plane monitor (the screen with the X-Plane menu bar at the top). Or, if\n you have a specific monitor you want to position your window on, you can\n pass a real monitor index as received from, e.g.,\n XPLMGetAllMonitorBoundsOS().\n\n Only applies to modern windows. (Windows created using the deprecated\n XPLMCreateWindow(), or windows compiled against a pre-XPLM300 version of\n the SDK will always use xplm_WindowPositionFree.)\n"]
@@ -1550,7 +1667,37 @@ extern "C" {
     #[doc = " XPLMDisableAIForPlane\n\n This routine turns off X-Plane's AI for a given plane.  The plane will\n continue to draw and be a real plane in X-Plane, but will not move itself.\n"]
     pub fn XPLMDisableAIForPlane(inPlaneIndex: ::std::os::raw::c_int);
 }
+#[doc = " Incoming speech on COM1"]
+pub const xplm_AudioRadioCom1: _bindgen_ty_34 = 0;
+#[doc = " Incoming speech on COM2"]
+pub const xplm_AudioRadioCom2: _bindgen_ty_34 = 1;
+#[doc = " Pilot's own speech"]
+pub const xplm_AudioRadioPilot: _bindgen_ty_34 = 2;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioRadioCopilot: _bindgen_ty_34 = 3;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioExteriorAircraft: _bindgen_ty_34 = 4;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioExteriorEnvironment: _bindgen_ty_34 = 5;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioExteriorUnprocessed: _bindgen_ty_34 = 6;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioInterior: _bindgen_ty_34 = 7;
+#[doc = " Copilot's own speech"]
+pub const xplm_AudioUI: _bindgen_ty_34 = 8;
+#[doc = " Dedicated ground vehicle cable"]
+pub const xplm_AudioGround: _bindgen_ty_34 = 9;
+#[doc = " Master bus. Not normally to be used directly."]
+pub const xplm_Master: _bindgen_ty_34 = 10;
+#[doc = " XPLMAudioBus\n\n This enumeration states the type of audio you wish to play - that is, the\n part of the simulated environment that the audio belongs in. If you use\n FMOD directly, note that COM1, COM2, Pilot and GND exist in a different\n FMOD bank so you may see these channels being unloaded/reloaded\n independently of the others.\n"]
+pub type _bindgen_ty_34 = ::std::os::raw::c_uint;
 pub type XPLMAudioBus = ::std::os::raw::c_int;
+#[doc = " Master bank. Handles all aircraft and environmental audio."]
+pub const xplm_MasterBank: _bindgen_ty_35 = 0;
+#[doc = " Radio bank. Handles COM1/COM2/GND/Pilot/Copilot."]
+pub const xplm_RadioBank: _bindgen_ty_35 = 1;
+#[doc = " XPLMBankID\n\n These values are returned as the parameter of the\n \"XPLM_MSG_FMOD_BANK_LOADED\" and \"XPLM_MSG_FMOD_BANK_UNLOADING\" messages.\n"]
+pub type _bindgen_ty_35 = ::std::os::raw::c_uint;
 pub type XPLMBankID = ::std::os::raw::c_int;
 pub const FMOD_RESULT_FMOD_OK: FMOD_RESULT = 0;
 #[doc = " These definitions are enough to play a basic sound without linking to the full FMOD distribution. You can still position it in 3D\n and change other basic parameters. In all cases where an FMOD_RESULT is returned, the full range of FMOD_RESULT codes are used - the\n status will in almost all situations be coming straight from FMOD - so the single definition here is purely to create a matching\n datatype and allow simple \"is OK\" and \"is not OK\" tests."]
@@ -1981,6 +2128,21 @@ extern "C" {
         inNotificationRefcon: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int;
 }
+pub const xplm_Nav_Unknown: _bindgen_ty_37 = 0;
+pub const xplm_Nav_Airport: _bindgen_ty_37 = 1;
+pub const xplm_Nav_NDB: _bindgen_ty_37 = 2;
+pub const xplm_Nav_VOR: _bindgen_ty_37 = 4;
+pub const xplm_Nav_ILS: _bindgen_ty_37 = 8;
+pub const xplm_Nav_Localizer: _bindgen_ty_37 = 16;
+pub const xplm_Nav_GlideSlope: _bindgen_ty_37 = 32;
+pub const xplm_Nav_OuterMarker: _bindgen_ty_37 = 64;
+pub const xplm_Nav_MiddleMarker: _bindgen_ty_37 = 128;
+pub const xplm_Nav_InnerMarker: _bindgen_ty_37 = 256;
+pub const xplm_Nav_Fix: _bindgen_ty_37 = 512;
+pub const xplm_Nav_DME: _bindgen_ty_37 = 1024;
+pub const xplm_Nav_LatLon: _bindgen_ty_37 = 2048;
+#[doc = " XPLMNavType\n\n These enumerations define the different types of navaids.  They are each\n defined with a separate bit so that they may be bit-wise added together to\n form sets of nav-aid types.\n\n NOTE: xplm_Nav_LatLon is a specific lat-lon coordinate entered into the\n FMS. It will not exist in the database, and cannot be programmed into the\n FMS. Querying the FMS for navaids will return it.  Use\n XPLMSetFMSEntryLatLon to set a lat/lon waypoint.\n"]
+pub type _bindgen_ty_37 = ::std::os::raw::c_uint;
 pub type XPLMNavType = ::std::os::raw::c_int;
 #[doc = " XPLMNavRef\n\n XPLMNavRef is an iterator into the navigation database.  The navigation\n database is essentially an array, but it is not necessarily densely\n populated. The only assumption you can safely make is that like-typed\n nav-aids are grouped together.\n\n Use XPLMNavRef to refer to a nav-aid.\n\n XPLM_NAV_NOT_FOUND is returned by functions that return an XPLMNavRef when\n the iterator must be invalid.\n"]
 pub type XPLMNavRef = ::std::os::raw::c_int;
@@ -2087,6 +2249,10 @@ extern "C" {
     #[doc = " XPLMGetGPSDestination\n\n This routine returns the current GPS destination.\n"]
     pub fn XPLMGetGPSDestination() -> XPLMNavRef;
 }
+#[doc = " The bitmap that contains window outlines, button outlines, fonts, etc."]
+pub const xplm_Tex_GeneralInterface: _bindgen_ty_38 = 0;
+#[doc = " XPLMTextureID\n\n XPLM Texture IDs name well-known textures in the sim for you to use. This\n allows you to recycle textures from X-Plane, saving VRAM.\n\n *Warning*: do not use these enums.  The only remaining use they have is to\n  access the legacy compatibility v10 UI texture; if you need this, get it\n  via the Widgets library.\n"]
+pub type _bindgen_ty_38 = ::std::os::raw::c_uint;
 pub type XPLMTextureID = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMSetGraphicsState\n\n XPLMSetGraphicsState changes OpenGL's fixed function pipeline state.  You\n are not responsible for restoring any state that is accessed via\n XPLMSetGraphicsState, but you are responsible for not accessing this state\n directly.\n\n - inEnableFog - enables or disables fog, equivalent to: glEnable(GL_FOG);\n - inNumberTexUnits - enables or disables a number of multitexturing units.\n   If the number is 0, 2d texturing is disabled entirely, as in\n   glDisable(GL_TEXTURE_2D);  Otherwise, 2d texturing is enabled, and a\n   number of multitexturing units are enabled sequentially, starting with\n   unit 0, e.g. glActiveTextureARB(GL_TEXTURE0_ARB); glEnable\n   (GL_TEXTURE_2D);\n - inEnableLighting - enables or disables OpenGL lighting, e.g.\n   glEnable(GL_LIGHTING); glEnable(GL_LIGHT0);\n - inEnableAlphaTesting - enables or disables the alpha test per pixel, e.g.\n   glEnable(GL_ALPHA_TEST);\n - inEnableAlphaBlending - enables or disables alpha blending per pixel,\n   e.g. glEnable(GL_BLEND);\n - inEnableDepthTesting - enables per pixel depth testing, as in\n   glEnable(GL_DEPTH_TEST);\n - inEnableDepthWriting - enables writing back of depth information to the\n   depth buffer, as in glDepthMask(GL_TRUE);\n\n The purpose of this function is to change OpenGL state while keeping\n X-Plane aware of the state changes; this keeps X-Plane from getting\n surprised by OGL state changes, and prevents X-Plane and plug-ins from\n having to set all state before all draws; XPLMSetGraphicsState internally\n skips calls to change state that is already properly enabled.\n\n X-Plane does not have a 'default' OGL state for plug-ins with respect to\n the above state vector; plug-ins should totally set OGL state using this\n API before drawing.  Use XPLMSetGraphicsState instead of any of the above\n OpenGL calls.\n\n WARNING: Any routine that performs drawing (e.g. XPLMDrawString or widget\n code) may change X-Plane's state.  Always set state before drawing after\n unknown code has executed.\n\n *Deprecation Warnings*: X-Plane's lighting and fog environment is\n  significantly more complex than the fixed function pipeline can express;\n  do not assume that lighting and fog state is a good approximation for 3-d\n  drawing.  Prefer to use XPLMInstancing to draw objects.  All calls to\n  XPLMSetGraphicsState should have no fog or lighting.\n"]
@@ -2187,7 +2353,19 @@ extern "C" {
         inNumChars: ::std::os::raw::c_int,
     ) -> f32;
 }
+#[doc = " The Y probe gives you the location of the tallest physical scenery along   *\n the Y axis going through the queried point."]
+pub const xplm_ProbeY: _bindgen_ty_40 = 0;
+#[doc = " XPLMProbeType\n\n XPLMProbeType defines the type of terrain probe - each probe has a\n different algorithm. (Only one type of probe is provided right now, but\n future APIs will expose more flexible or powerful or useful probes.\n"]
+pub type _bindgen_ty_40 = ::std::os::raw::c_uint;
 pub type XPLMProbeType = ::std::os::raw::c_int;
+#[doc = " The probe hit terrain and returned valid values."]
+pub const xplm_ProbeHitTerrain: _bindgen_ty_41 = 0;
+#[doc = " An error in the API call.  Either the probe struct size is bad, the probe  *\n is invalid, or the type is mismatched for the specific query call."]
+pub const xplm_ProbeError: _bindgen_ty_41 = 1;
+#[doc = " The probe call succeeded but there is no terrain under this point (perhaps *\n it is off the side of the planet?)"]
+pub const xplm_ProbeMissed: _bindgen_ty_41 = 2;
+#[doc = " XPLMProbeResult\n\n Probe results - possible results from a probe query.\n"]
+pub type _bindgen_ty_41 = ::std::os::raw::c_uint;
 pub type XPLMProbeResult = ::std::os::raw::c_int;
 #[doc = " XPLMProbeRef\n\n An XPLMProbeRef is an opaque handle to a probe, used for querying the\n terrain.\n"]
 pub type XPLMProbeRef = *mut ::std::os::raw::c_void;
@@ -2620,6 +2798,12 @@ extern "C" {
         inRef: *mut ::std::os::raw::c_void,
     );
 }
+#[doc = " Your callback runs before X-Plane integrates the flight model."]
+pub const xplm_FlightLoop_Phase_BeforeFlightModel: _bindgen_ty_42 = 0;
+#[doc = " Your callback runs after X-Plane integrates the flight model."]
+pub const xplm_FlightLoop_Phase_AfterFlightModel: _bindgen_ty_42 = 1;
+#[doc = " XPLMFlightLoopPhaseType\n\n You can register a flight loop callback to run either before or after the\n flight model is integrated by X-Plane.\n"]
+pub type _bindgen_ty_42 = ::std::os::raw::c_uint;
 pub type XPLMFlightLoopPhaseType = ::std::os::raw::c_int;
 #[doc = " XPLMFlightLoopID\n\n This is an opaque identifier for a flight loop callback. You can use this\n identifier to easily track and remove your callbacks, or to use the new\n flight loop APIs.\n"]
 pub type XPLMFlightLoopID = *mut ::std::os::raw::c_void;
@@ -3433,6 +3617,12 @@ extern "C" {
         out_info: *mut XPLMWeatherInfo_t,
     ) -> ::std::os::raw::c_int;
 }
+#[doc = " Control the camera until the user picks a new view."]
+pub const xplm_ControlCameraUntilViewChanges: _bindgen_ty_48 = 1;
+#[doc = " Control the camera until your plugin is disabled or another plugin forcibly*\n takes control."]
+pub const xplm_ControlCameraForever: _bindgen_ty_48 = 2;
+#[doc = " XPLMCameraControlDuration\n\n This enumeration states how long you want to retain control of the camera.\n You can retain it indefinitely or until the user selects a new view.\n"]
+pub type _bindgen_ty_48 = ::std::os::raw::c_uint;
 pub type XPLMCameraControlDuration = ::std::os::raw::c_int;
 #[doc = " XPLMCameraPosition_t\n\n This structure contains a full specification of the camera. X, Y, and Z are\n the camera's position in OpenGL coordinates; pitch, roll, and yaw are\n rotations from a camera facing flat north in degrees. Positive pitch means\n nose up, positive roll means roll right, and positive yaw means yaw right,\n all in degrees. Zoom is a zoom factor, with 1.0 meaning normal zoom and 2.0\n magnifying by 2x (objects appear larger).\n"]
 #[repr(C)]
@@ -3565,6 +3755,11 @@ extern "C" {
 pub type XPLMMapLayerID = *mut ::std::os::raw::c_void;
 #[doc = " XPLMMapProjectionID\n\n This is an opaque handle for a map projection. Pass it to the projection\n APIs to translate between map coordinates and latitude/longitudes.\n"]
 pub type XPLMMapProjectionID = *mut ::std::os::raw::c_void;
+pub const xplm_MapStyle_VFR_Sectional: _bindgen_ty_49 = 0;
+pub const xplm_MapStyle_IFR_LowEnroute: _bindgen_ty_49 = 1;
+pub const xplm_MapStyle_IFR_HighEnroute: _bindgen_ty_49 = 2;
+#[doc = " XPLMMapStyle\n\n Indicates the visual style being drawn by the map. In X-Plane, the user can\n choose between a number of map types, and different map types may have use\n a different visual representation for the same elements (for instance, the\n visual style of the terrain layer changes drastically between the VFR and\n IFR layers), or certain layers may be disabled entirely in some map types\n (e.g., localizers are only visible in the IFR low-enroute style).\n"]
+pub type _bindgen_ty_49 = ::std::os::raw::c_uint;
 pub type XPLMMapStyle = ::std::os::raw::c_int;
 #[doc = " XPLMMapDrawingCallback_f\n\n This is the OpenGL map drawing callback for plugin-created map layers. You\n can perform arbitrary OpenGL drawing from this callback, with one\n exception: changes to the Z-buffer are not permitted, and will result in\n map drawing errors.\n\n All drawing done from within this callback appears beneath all built-in\n X-Plane icons and labels, but above the built-in \"fill\" layers (layers\n providing major details, like terrain and water). Note, however, that the\n relative ordering between the drawing callbacks of different plugins is not\n guaranteed.\n"]
 pub type XPLMMapDrawingCallback_f = ::std::option::Option<
@@ -3615,6 +3810,12 @@ pub type XPLMMapPrepareCacheCallback_f = ::std::option::Option<
 pub type XPLMMapWillBeDeletedCallback_f = ::std::option::Option<
     unsafe extern "C" fn(inLayer: XPLMMapLayerID, inRefcon: *mut ::std::os::raw::c_void),
 >;
+#[doc = " A layer that draws \"fill\" graphics, like weather patterns, terrain, etc.   *\n Fill layers frequently cover a large portion of the visible map area."]
+pub const xplm_MapLayer_Fill: _bindgen_ty_50 = 0;
+#[doc = " A layer that provides markings for particular map features, like NAVAIDs,  *\n airports, etc. Even dense markings layers cover a small portion of the     *\n total map area."]
+pub const xplm_MapLayer_Markings: _bindgen_ty_50 = 1;
+#[doc = " XPLMMapLayerType\n\n Indicates the type of map layer you are creating. Fill layers will always\n be drawn beneath markings layers.\n"]
+pub type _bindgen_ty_50 = ::std::os::raw::c_uint;
 pub type XPLMMapLayerType = ::std::os::raw::c_int;
 #[doc = " XPLMCreateMapLayer_t\n\n This structure defines all of the parameters used to create a map layer\n using XPLMCreateMapLayer. The structure will be expanded in future SDK APIs\n to include more features.  Always set the structSize member to the size of\n your struct in bytes!\n\n Each layer must be associated with exactly one map instance in X-Plane.\n That map, and that map alone, will call your callbacks. Likewise, when that\n map is deleted, your layer will be as well.\n"]
 #[repr(C)]
@@ -3794,6 +3995,12 @@ extern "C" {
     #[doc = " XPLMMapExists\n\n Returns 1 if the map with the specified identifier already exists in\n X-Plane. In that case, you can safely call XPLMCreateMapLayer() specifying\n that your layer should be added to that map.\n"]
     pub fn XPLMMapExists(mapIdentifier: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
+#[doc = " Orient such that a 0 degree rotation matches the map's north"]
+pub const xplm_MapOrientation_Map: _bindgen_ty_51 = 0;
+#[doc = " Orient such that a 0 degree rotation is \"up\" relative to the user interface"]
+pub const xplm_MapOrientation_UI: _bindgen_ty_51 = 1;
+#[doc = " XPLMMapOrientation\n\n Indicates whether a map element should be match its rotation to the map\n itself, or to the user interface. For instance, the map itself may be\n rotated such that \"up\" matches the user's aircraft, but you may want to\n draw a text label such that it is always rotated zero degrees relative to\n the user's perspective. In that case, you would have it draw with UI\n orientation.\n"]
+pub type _bindgen_ty_51 = ::std::os::raw::c_uint;
 pub type XPLMMapOrientation = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMDrawMapIconFromSheet\n\n Enables plugin-created map layers to draw PNG icons using X-Plane's\n built-in icon drawing functionality. Only valid from within an\n XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons\n to be drawn from within your callback).\n\n X-Plane will automatically manage the memory for your texture so that it\n only has to be loaded from disk once as long as you continue drawing it\n per-frame. (When you stop drawing it, the memory may purged in a \"garbage\n collection\" pass, require a load from disk in the future.)\n\n Instead of having X-Plane draw a full PNG, this method allows you to use UV\n coordinates to request a portion of the image to be drawn. This allows you\n to use a single texture load (of an icon sheet, for example) to draw many\n icons. Doing so is much more efficient than drawing a dozen different small\n PNGs.\n\n The UV coordinates used here treat the texture you load as being comprised\n of a number of identically sized \"cells\". You specify the width and height\n in cells (ds and dt, respectively), as well as the coordinates within the\n cell grid for the sub-image you'd like to draw.\n\n Note that you can use different ds and dt values in subsequent calls with\n the same texture sheet. This enables you to use icons of different sizes in\n the same sheet if you arrange them properly in the PNG.\n\n This function is only valid from within an XPLMIconDrawingCallback_t (but\n you can request an arbitrary number of icons to be drawn from within your\n callback).\n"]

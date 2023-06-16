@@ -41,11 +41,7 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
         .allowlist_function("XP.*")
         .allowlist_type("XP.*")
         .allowlist_var("XPLM_.*")
-        .allowlist_var("xplm_Command.*")
-        .allowlist_var("xplm_DataFile.*")
-        .allowlist_var("xplm_Host_.*")
-        .allowlist_var("xplm_Language_.*")
-        .allowlist_var("xplm_Menu_.*")
+        .allowlist_var("xplm_.*")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .clang_args([
             "-fparse-all-comments",
