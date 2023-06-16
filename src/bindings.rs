@@ -2878,6 +2878,14 @@ extern "C" {
         inRefcon: *mut ::std::os::raw::c_void,
     );
 }
+#[doc = " There is no symbol to the left of the menu item."]
+pub const xplm_Menu_NoCheck: _bindgen_ty_47 = 0;
+#[doc = " The menu has a mark next to it that is unmarked (not lit)."]
+pub const xplm_Menu_Unchecked: _bindgen_ty_47 = 1;
+#[doc = " The menu has a mark next to it that is checked (lit)."]
+pub const xplm_Menu_Checked: _bindgen_ty_47 = 2;
+#[doc = " XPLMMenuCheck\n\n These enumerations define the various 'check' states for an X-Plane menu.\n 'Checking' in X-Plane actually appears as a light which may or may not be\n lit.  So there are three possible states.\n"]
+pub type _bindgen_ty_47 = ::std::os::raw::c_uint;
 pub type XPLMMenuCheck = ::std::os::raw::c_int;
 #[doc = " XPLMMenuID\n\n This is a unique ID for each menu you create.\n"]
 pub type XPLMMenuID = *mut ::std::os::raw::c_void;
