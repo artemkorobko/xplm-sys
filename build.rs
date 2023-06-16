@@ -40,7 +40,7 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
     let bindings = builder
         .allowlist_function("XP.*")
         .allowlist_type("XP.*")
-        .allowlist_var("XPLM_VK_.*")
+        .allowlist_var("XPLM_.*")
         .allowlist_var("xplm_Command.*")
         .allowlist_var("xplm_DataFile.*")
         .allowlist_var("xplm_Host_.*")
