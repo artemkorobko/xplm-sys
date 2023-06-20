@@ -1815,6 +1815,22 @@ extern "C" {
 }
 #[doc = " XPLMDataRef\n\n A dataref is an opaque handle to data provided by the simulator or another\n plugin. It uniquely identifies one variable (or array of variables) over\n the lifetime of your plugin. You never hard code these values; you always\n get them from XPLMFindDataRef.\n"]
 pub type XPLMDataRef = *mut ::std::os::raw::c_void;
+#[doc = " Data of a type the current XPLM doesn't do."]
+pub const xplmType_Unknown: _bindgen_ty_36 = 0;
+#[doc = " A single 4-byte integer, native endian."]
+pub const xplmType_Int: _bindgen_ty_36 = 1;
+#[doc = " A single 4-byte float, native endian."]
+pub const xplmType_Float: _bindgen_ty_36 = 2;
+#[doc = " A single 8-byte double, native endian."]
+pub const xplmType_Double: _bindgen_ty_36 = 4;
+#[doc = " An array of 4-byte floats, native endian."]
+pub const xplmType_FloatArray: _bindgen_ty_36 = 8;
+#[doc = " An array of 4-byte integers, native endian."]
+pub const xplmType_IntArray: _bindgen_ty_36 = 16;
+#[doc = " A variable block of data."]
+pub const xplmType_Data: _bindgen_ty_36 = 32;
+#[doc = " XPLMDataTypeID\n\n This is an enumeration that defines the type of the data behind a data\n reference. This allows you to sanity check that the data type matches what\n you expect. But for the most part, you will know the type of data you are\n expecting from the online documentation.\n\n Data types each take a bit field; it is legal to have a single dataref be\n more than one type of data.  Whe this happens, you can pick any matching\n get/set API.\n"]
+pub type _bindgen_ty_36 = ::std::os::raw::c_uint;
 pub type XPLMDataTypeID = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMCountDataRefs\n\n Returns the total number of datarefs that have been registered in X-Plane.\n"]
@@ -2311,6 +2327,12 @@ extern "C" {
         inBottom: ::std::os::raw::c_int,
     );
 }
+#[doc = " Mono-spaced font for user interface.  Available in all versions of the SDK."]
+pub const xplmFont_Basic: _bindgen_ty_39 = 0;
+#[doc = " Proportional UI font."]
+pub const xplmFont_Proportional: _bindgen_ty_39 = 18;
+#[doc = " XPLMFontID\n\n X-Plane features some fixed-character fonts.  Each font may have its own\n metrics.\n\n WARNING: Some of these fonts are no longer supported or may have changed\n geometries. For maximum copmatibility, see the comments below.\n\n Note: X-Plane 7 supports proportional-spaced fonts.  Since no measuring\n routine is available yet, the SDK will normally draw using a fixed-width\n font.  You can use a dataref to enable proportional font drawing on XP7 if\n you want to.\n"]
+pub type _bindgen_ty_39 = ::std::os::raw::c_uint;
 pub type XPLMFontID = ::std::os::raw::c_int;
 extern "C" {
     #[doc = " XPLMDrawString\n\n This routine draws a NULL terminated string in a given font.  Pass in the\n lower left pixel that the character is to be drawn onto.  Also pass the\n character and font ID. This function returns the x offset plus the width of\n all drawn characters. The color to draw in is specified as a pointer to an\n array of three floating point colors, representing RGB intensities from 0.0\n to 1.0.\n"]
