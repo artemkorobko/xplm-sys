@@ -42,7 +42,7 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
         .allowlist_type("XP.*")
         .allowlist_var("XPLM_.*")
         .allowlist_var("xplm.*")
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .clang_args([
             "-fparse-all-comments",
             "-DLIN=1",

@@ -9,4 +9,4 @@ generate-bindings = ["dep:bindgen"]
 [dependencies]
 
 [build-dependencies]
-bindgen = { version = "0.65", optional = true }
+bindgen = { version = "0.69.4", optional = true }
