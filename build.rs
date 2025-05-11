@@ -29,6 +29,7 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
     headers.extend(collect_headers_in(&widgets_sdk_path)?);
     let xplm_sdk_path = sdk_path.join("XPLM");
     headers.extend(collect_headers_in(&xplm_sdk_path)?);
+    let out_path = manifest_path.join("src").join("bindings.rs");
 
     // https://developer.x-plane.com/sdk/plugin-sdk-downloads
     let mut builder = bindgen::Builder::default();
@@ -37,7 +38,8 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
         builder = builder.header(header);
     }
 
-    let bindings = builder
+    builder
+        .layout_tests(false)
         .allowlist_function("XP.*")
         .allowlist_type("XP.*")
         .allowlist_var("XPLM_.*")
@@ -52,14 +54,13 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
             "-DXPLM301", // X-Plane 11.20 & newer (64-bit only)
             "-DXPLM303", // X-Plane 11.50 & newer (64-bit only)
             "-DXPLM400", // X-Plane 12.04 & newer (64-bit only)
+            "-DXPLM410", // X-Plane 12.1.0 & newer (64-bit only)
             &format!("-I{}", xplm_sdk_path.display()),
             &format!("-I{}", widgets_sdk_path.display()),
         ])
         .generate()
-        .expect("Failed to generate bindings");
-
-    let out_path = manifest_path.join("src").join("bindings.rs");
-    bindings.write_to_file(out_path)
+        .expect("Failed to generate bindings")
+        .write_to_file(out_path)
 }
 
 fn link_libraries(manifest_path: &path::Path) {
