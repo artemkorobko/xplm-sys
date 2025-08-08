@@ -3,14 +3,15 @@ use std::{env, path};
 fn main() {
     let manifest_path = env::var("CARGO_MANIFEST_DIR")
         .map(path::PathBuf::from)
-        .expect("Env variable `CARGO_MANIFEST_DIR` should be set");
+        .expect("Env variable `CARGO_MANIFEST_DIR` should be set by Cargo");
 
-    #[cfg(feature = "generate-bindings")]
-    generate_bindings(&manifest_path).expect("Failed to generate bindings");
+    if let Err(error) = generate_bindings(&manifest_path) {
+        panic!("Failed to generate X-Plane SDK bindings: {error}");
+    }
+
     link_libraries(&manifest_path);
 }
 
-#[cfg(feature = "generate-bindings")]
 fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
     fn collect_headers_in(path: &path::Path) -> std::io::Result<Vec<String>> {
         let mut headers = Vec::new();
@@ -42,8 +43,7 @@ fn generate_bindings(manifest_path: &path::Path) -> std::io::Result<()> {
         .layout_tests(false)
         .allowlist_function("XP.*")
         .allowlist_type("XP.*")
-        .allowlist_var("XPLM_.*")
-        .allowlist_var("xplm.*")
+        .allowlist_var("XPLM_.*|xplm.*")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .clang_args([
             "-fparse-all-comments",
@@ -67,18 +67,21 @@ fn link_libraries(manifest_path: &path::Path) {
     let library_path = manifest_path.join("SDK").join("Libraries");
 
     if cfg!(target_os = "windows") {
-        println!(
-            "cargo:rustc-link-search={}",
-            library_path.join("Win").display()
-        );
+        let path = library_path.join("Win");
+        println!("cargo:rustc-link-search={}", path.display());
         println!("cargo:rustc-link-lib=XPLM_64");
         println!("cargo:rustc-link-lib=XPWidgets_64");
     } else if cfg!(target_os = "macos") {
-        println!(
-            "cargo:rustc-link-search=framework={}",
-            library_path.join("Mac").display()
-        );
+        let path = library_path.join("Mac");
+        println!("cargo:rustc-link-search=framework={}", path.display());
         println!("cargo:rustc-link-lib=framework=XPLM");
         println!("cargo:rustc-link-lib=framework=XPWidgets");
+    } else if cfg!(target_os = "linux") {
+        let path = library_path.join("Lin");
+        println!("cargo:rustc-link-search={}", path.display());
+        println!("cargo:rustc-link-lib=XPLM_64");
+        println!("cargo:rustc-link-lib=XPWidgets_64");
+    } else {
+        panic!("Unsupported target OS for X-Plane SDK");
     }
 }

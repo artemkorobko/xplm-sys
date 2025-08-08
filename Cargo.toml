@@ -1,12 +1,9 @@
 [package]
 name = "xplm-sys"
 version = "4.1.0"
-edition = "2021"
-
-[features]
-generate-bindings = ["dep:bindgen"]
+edition = "2024"
 
 [dependencies]
 
 [build-dependencies]
-bindgen = { version = "0.71", optional = true }
+bindgen = "0.72"
